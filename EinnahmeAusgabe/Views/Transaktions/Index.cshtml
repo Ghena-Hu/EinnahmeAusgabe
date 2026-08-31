@@ -1,0 +1,148 @@
+﻿
+@model IEnumerable<Transaktion>
+
+@{
+    ViewData["Title"] = "Transaktionen";
+}
+
+<h1>Transaktionen</h1>
+
+<form asp-action="Index" method="get">
+    <div class="card p-3 mb-4">
+        <div class="row g-2 align-items-end">
+
+            <div class="col-md-3">
+                <label class="form-label">Suche</label>
+                <input type="text"
+                       name="suche"
+                       value="@Context.Request.Query["suche"]"
+                       class="form-control"
+                       placeholder="Bezeichnung..." />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Von</label>
+                <input type="date"
+                       name="datumVon"
+                       value="@Context.Request.Query["datumVon"]"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Bis</label>
+                <input type="date"
+                       name="datumBis"
+                       value="@Context.Request.Query["datumBis"]"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Sortieren</label>
+                <select name="sortierung" class="form-select">
+                    <option value="">Standard</option>
+                    <option value="bezeichnung_auf">A-Z</option>
+                    <option value="bezeichnung_ab">Z-A</option>
+                    <option value="datum_alt">Älteste</option>
+                    <option value="datum_neu">Neueste</option>
+                    <option value="betrag_klein">Betrag ↑</option>
+                    <option value="betrag_gross">Betrag ↓</option>
+                </select>
+            </div>
+
+            <div class="col-md-1">
+                <label class="form-label">Anzahl</label>
+                <select name="pageSize" class="form-select">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="0">Alle</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filtern
+                </button>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        + Neue Transaktion
+    </a>
+</div>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Bezeichnung</th>
+            <th>Betrag</th>
+            <th>Erstellungsdatum</th>
+            <th>Typ</th>
+            <th>Kategorie</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Bezeichnung
+                </td>
+
+                <td>
+                    @item.Betrag.ToString("C")
+                </td>
+
+                <td>
+                    @item.Erstellungsdatum.ToString("dd.MM.yyyy HH:mm")
+                </td>
+
+                <td>
+                    @item.Typ
+                </td>
+
+                <td>
+                    @if (item.Kategorie != null)
+                    {
+                        <span style="
+                                    display:inline-block;
+                                    width:18px;
+                                    height:18px;
+                                    background-color:@item.Kategorie.Farbe;
+                                    border:1px solid #000;
+                                    border-radius:4px;
+                                    vertical-align:middle;
+                                    margin-right:6px;">
+                        </span>
+
+                        @item.Kategorie.Name
+                    }
+                    else
+                    {
+                        <span class="text-muted">Keine Kategorie</span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@item.Id">Bearbeiten</a>
+                    |
+                    <a asp-action="Details"
+                       asp-route-id="@item.Id">Details</a>
+                    |
+                    <a asp-action="Delete"
+                       asp-route-id="@item.Id">Löschen</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
