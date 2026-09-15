@@ -47,6 +47,7 @@ Web-App zur Verwaltung von Einnahmen und Ausgaben.
 * Eine Kategorie → 0 bis viele Transaktionen
 * Eine Transaktion → 0 oder 1 Kategorie
 * `KategorieId` → Fremdschlüssel
+* KategorieId kann null sein → Keine Kategorie.
 
 Beim Löschen einer Kategorie bleiben die Transaktionen erhalten und bekommen „Keine Kategorie“.
 
